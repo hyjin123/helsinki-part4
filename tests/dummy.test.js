@@ -83,14 +83,14 @@ describe("total likes", () => {
   });
 });
 
-describe("most likes", () => {
+describe("most blog likes", () => {
   test("when list has only one blog, equals the object of that blog", () => {
-    const result = listHelper.mostLikes(listWithOneBlog);
+    const result = listHelper.favoriteBlog(listWithOneBlog);
     assert.deepStrictEqual(result, listWithOneBlog[0]);
   });
 
   test("when list has many blogs, equals the object of the blog that has the most likes", () => {
-    const result = listHelper.mostLikes(listWithManyBlogs);
+    const result = listHelper.favoriteBlog(listWithManyBlogs);
     assert.deepStrictEqual(result, listWithManyBlogs[2]);
   });
 });
@@ -104,5 +104,17 @@ describe("most blogs", () => {
   test("when list has many blogs, equals the object of the author with most blogs", () => {
     const result = listHelper.mostBlogs(listWithManyBlogs);
     assert.deepStrictEqual(result, { author: "Robert C. Martin", blogs: 3 });
+  });
+});
+
+describe("author with most likes total", () => {
+  test("when list has only one blog, equals that author with that same amount of likes", () => {
+    const result = listHelper.mostLikes(listWithOneBlog);
+    assert.deepStrictEqual(result, { author: "Edsger W. Dijkstra", likes: 5 });
+  });
+
+  test("when list has many blogs, equals the object of the author with most total likes", () => {
+    const result = listHelper.mostLikes(listWithManyBlogs);
+    assert.deepStrictEqual(result, { author: "Edsger W. Dijkstra", likes: 17 });
   });
 });
