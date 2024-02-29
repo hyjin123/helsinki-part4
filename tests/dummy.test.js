@@ -94,3 +94,15 @@ describe("most likes", () => {
     assert.deepStrictEqual(result, listWithManyBlogs[2]);
   });
 });
+
+describe("most blogs", () => {
+  test("when list has only one blog, equals the object of that author", () => {
+    const result = listHelper.mostBlogs(listWithOneBlog);
+    assert.deepStrictEqual(result, { author: "Edsger W. Dijkstra", blogs: 1 });
+  });
+
+  test("when list has many blogs, equals the object of the author with most blogs", () => {
+    const result = listHelper.mostBlogs(listWithManyBlogs);
+    assert.deepStrictEqual(result, { author: "Robert C. Martin", blogs: 3 });
+  });
+});
