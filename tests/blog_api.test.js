@@ -17,100 +17,104 @@ beforeEach(async () => {
   }
 });
 
-test.only("blogs are returned as json", async () => {
-  await api
-    .get("/api/blogs")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
+describe.only("when there is initially some blogs saved", () => {
+  test.only("blogs are returned as json", async () => {
+    await api
+      .get("/api/blogs")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
+
+  test.only("there are two blogs in the database", async () => {
+    const response = await helper.blogsInDb();
+
+    assert.strictEqual(response.length, helper.initialBlogs.length);
+  });
+
+  test.only("unique identifier is named id", async () => {
+    const response = await helper.blogsInDb();
+
+    // filter out all blogs with id property and it should match the number of initialBlog length
+    const result = response.filter((blog) => blog.id);
+
+    assert.strictEqual(result.length, helper.initialBlogs.length);
+  });
 });
 
-test.only("there are two blogs in the database", async () => {
-  const response = await helper.blogsInDb();
+describe.only("addition of a new blog", () => {
+  test.only("valid blog can be added", async () => {
+    const newBlog = {
+      title: "I love to go on walks",
+      author: "Munjee Jin",
+      url: "www.walks.com",
+      likes: 5,
+    };
 
-  assert.strictEqual(response.length, helper.initialBlogs.length);
-});
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
 
-test.only("unique identifier is named id", async () => {
-  const response = await helper.blogsInDb();
+    const response = await helper.blogsInDb();
 
-  // filter out all blogs with id property and it should match the number of initialBlog length
-  const result = response.filter((blog) => blog.id);
+    assert.strictEqual(response.length, helper.initialBlogs.length + 1);
 
-  assert.strictEqual(result.length, helper.initialBlogs.length);
-});
+    const contents = response.map((r) => r.title);
 
-test.only("valid blog can be added", async () => {
-  const newBlog = {
-    title: "I love to go on walks",
-    author: "Munjee Jin",
-    url: "www.walks.com",
-    likes: 5,
-  };
+    assert(contents.includes("I love to go on walks"));
+  });
 
-  await api
-    .post("/api/blogs")
-    .send(newBlog)
-    .expect(201)
-    .expect("Content-Type", /application\/json/);
+  test.only("like will default to 0 if not specified", async () => {
+    const newBlog = {
+      title: "I love to go on walks",
+      author: "Munjee Jin",
+      url: "www.walks.com",
+    };
 
-  const response = await helper.blogsInDb();
+    let likes = null;
 
-  assert.strictEqual(response.length, helper.initialBlogs.length + 1);
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/)
+      .expect((response) => {
+        // this gets the likes of the posted blog
+        likes = response.body.likes;
+      });
 
-  const contents = response.map((r) => r.title);
+    // test if added to database
+    const response = await helper.blogsInDb();
 
-  assert(contents.includes("I love to go on walks"));
-});
+    assert.strictEqual(response.length, helper.initialBlogs.length + 1);
 
-test.only("like will default to 0 if not specified", async () => {
-  const newBlog = {
-    title: "I love to go on walks",
-    author: "Munjee Jin",
-    url: "www.walks.com",
-  };
+    // test if likes will default to zero for that specific blog
+    assert.strictEqual(likes, 0);
+  });
 
-  let likes = null;
+  test.only("if title or url is missing, it doesn't save and responds with 400 status code", async () => {
+    const blogWithoutTitle = {
+      author: "Munjee Jin",
+      url: "www.walks.com",
+      likes: 2,
+    };
 
-  await api
-    .post("/api/blogs")
-    .send(newBlog)
-    .expect(201)
-    .expect("Content-Type", /application\/json/)
-    .expect((response) => {
-      // this gets the likes of the posted blog
-      likes = response.body.likes;
-    });
+    const blogWithoutUrl = {
+      title: "I love golfing!",
+      author: "Julia Kim",
+      likes: 15,
+    };
 
-  // test if added to database
-  const response = await helper.blogsInDb();
+    await api.post("/api/blogs").send(blogWithoutTitle).expect(400);
 
-  assert.strictEqual(response.length, helper.initialBlogs.length + 1);
+    await api.post("/api/blogs").send(blogWithoutUrl).expect(400);
 
-  // test if likes will default to zero for that specific blog
-  assert.strictEqual(likes, 0);
-});
+    // test that new blog did not get added to database
+    const response = await helper.blogsInDb();
 
-test.only("if title or url is missing, it doesn't save and responds with 400 status code", async () => {
-  const blogWithoutTitle = {
-    author: "Munjee Jin",
-    url: "www.walks.com",
-    likes: 2,
-  };
-
-  const blogWithoutUrl = {
-    title: "I love golfing!",
-    author: "Julia Kim",
-    likes: 15,
-  };
-
-  await api.post("/api/blogs").send(blogWithoutTitle).expect(400);
-
-  await api.post("/api/blogs").send(blogWithoutUrl).expect(400);
-
-  // test that new blog did not get added to database
-  const response = await helper.blogsInDb();
-
-  assert.strictEqual(response.length, helper.initialBlogs.length);
+    assert.strictEqual(response.length, helper.initialBlogs.length);
+  });
 });
 
 describe.only("deletion of a blog", () => {
