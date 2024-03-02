@@ -43,6 +43,15 @@ test.only("there are two blogs in the database", async () => {
   assert.strictEqual(response.body.length, initialBlogs.length);
 });
 
+test.only("unique identifier is named id", async () => {
+  const response = await api.get("/api/blogs");
+
+  // filter out all blogs with id property and it should match the number of initialBlog length
+  const result = response.body.filter((blog) => blog.id);
+
+  assert.strictEqual(result.length, initialBlogs.length);
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
