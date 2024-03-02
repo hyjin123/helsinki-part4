@@ -75,6 +75,34 @@ test.only("valid blog can be added", async () => {
   assert(contents.includes("I love to go on walks"));
 });
 
+test.only("like will default to 0 if not specified", async () => {
+  const newBlog = {
+    title: "I love to go on walks",
+    author: "Munjee Jin",
+    url: "www.walks.com",
+  };
+
+  let likes = null;
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/)
+    .expect((response) => {
+      // this gets the likes of the posted blog
+      likes = response.body.likes;
+    });
+
+  // test if added to database
+  const response = await api.get("/api/blogs");
+
+  assert.strictEqual(response.body.length, initialBlogs.length + 1);
+
+  // test if likes will default to zero for that specific blog
+  assert.strictEqual(likes, 0);
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
