@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require("node:test");
+const { test, after, beforeEach, describe } = require("node:test");
 const assert = require("node:assert");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
@@ -111,6 +111,23 @@ test.only("if title or url is missing, it doesn't save and responds with 400 sta
   const response = await helper.blogsInDb();
 
   assert.strictEqual(response.length, helper.initialBlogs.length);
+});
+
+describe.only("deletion of a blog", () => {
+  test.only("succeeds with status code 204 if id is valid for deletion", async () => {
+    const blogs = await helper.blogsInDb();
+    const blogToDelete = blogs[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const response = await helper.blogsInDb();
+
+    assert.strictEqual(response.length, helper.initialBlogs.length - 1);
+
+    const contents = response.map((r) => r.title);
+
+    assert(!contents.includes("Life is up and down"));
+  });
 });
 
 after(async () => {
