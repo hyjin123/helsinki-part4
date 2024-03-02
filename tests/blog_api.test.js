@@ -130,6 +130,32 @@ describe.only("deletion of a blog", () => {
   });
 });
 
+describe.only("updating a blog", () => {
+  test.only("succeeds with status code 204 if id is valid for updating", async () => {
+    const blogs = await helper.blogsInDb();
+    const blogToUpdate = blogs[0];
+
+    const newBlog = {
+      title: "Life is up and down",
+      author: "Sean Jin",
+      url: "www.google.ca",
+      likes: 24,
+    };
+
+    let likes = null;
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(newBlog)
+      .expect(200)
+      .expect((response) => {
+        likes = response.body.likes;
+      });
+
+    assert.strictEqual(likes, 24);
+  });
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
