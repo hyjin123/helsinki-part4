@@ -4,30 +4,17 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const { Blog } = require("../models/blog");
+const helper = require("./test_helper");
 
 const api = supertest(app);
 
-const initialBlogs = [
-  {
-    title: "Life is up and down",
-    author: "Sean Jin",
-    url: "www.google.ca",
-    likes: 2,
-  },
-  {
-    title: "Coding is fun",
-    author: "Nancy Tran",
-    url: "www.youtube.com",
-    likes: 3,
-  },
-];
-
 beforeEach(async () => {
   await Blog.deleteMany({});
-  let blogObject = new Blog(initialBlogs[0]);
-  await blogObject.save();
-  blogObject = new Blog(initialBlogs[1]);
-  await blogObject.save();
+
+  for (let blog of helper.initialBlogs) {
+    let blogObject = new Blog(blog);
+    await blogObject.save();
+  }
 });
 
 test.only("blogs are returned as json", async () => {
@@ -38,18 +25,18 @@ test.only("blogs are returned as json", async () => {
 });
 
 test.only("there are two blogs in the database", async () => {
-  const response = await api.get("/api/blogs");
+  const response = await helper.blogsInDb();
 
-  assert.strictEqual(response.body.length, initialBlogs.length);
+  assert.strictEqual(response.length, helper.initialBlogs.length);
 });
 
 test.only("unique identifier is named id", async () => {
-  const response = await api.get("/api/blogs");
+  const response = await helper.blogsInDb();
 
   // filter out all blogs with id property and it should match the number of initialBlog length
-  const result = response.body.filter((blog) => blog.id);
+  const result = response.filter((blog) => blog.id);
 
-  assert.strictEqual(result.length, initialBlogs.length);
+  assert.strictEqual(result.length, helper.initialBlogs.length);
 });
 
 test.only("valid blog can be added", async () => {
@@ -66,11 +53,11 @@ test.only("valid blog can be added", async () => {
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
-  const response = await api.get("/api/blogs");
+  const response = await helper.blogsInDb();
 
-  assert.strictEqual(response.body.length, initialBlogs.length + 1);
+  assert.strictEqual(response.length, helper.initialBlogs.length + 1);
 
-  const contents = response.body.map((r) => r.title);
+  const contents = response.map((r) => r.title);
 
   assert(contents.includes("I love to go on walks"));
 });
@@ -95,12 +82,35 @@ test.only("like will default to 0 if not specified", async () => {
     });
 
   // test if added to database
-  const response = await api.get("/api/blogs");
+  const response = await helper.blogsInDb();
 
-  assert.strictEqual(response.body.length, initialBlogs.length + 1);
+  assert.strictEqual(response.length, helper.initialBlogs.length + 1);
 
   // test if likes will default to zero for that specific blog
   assert.strictEqual(likes, 0);
+});
+
+test.only("if title or url is missing, it doesn't save and responds with 400 status code", async () => {
+  const blogWithoutTitle = {
+    author: "Munjee Jin",
+    url: "www.walks.com",
+    likes: 2,
+  };
+
+  const blogWithoutUrl = {
+    title: "I love golfing!",
+    author: "Julia Kim",
+    likes: 15,
+  };
+
+  await api.post("/api/blogs").send(blogWithoutTitle).expect(400);
+
+  await api.post("/api/blogs").send(blogWithoutUrl).expect(400);
+
+  // test that new blog did not get added to database
+  const response = await helper.blogsInDb();
+
+  assert.strictEqual(response.length, helper.initialBlogs.length);
 });
 
 after(async () => {

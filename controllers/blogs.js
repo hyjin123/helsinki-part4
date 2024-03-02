@@ -13,19 +13,30 @@ blogsRouter.get("/", async (request, response) => {
 blogsRouter.get("/:id", async (request, response) => {
   const blog = await Blog.findById(request.params.id);
 
-  response.status(201).json(blog);
+  if (blog) {
+    response.status(201).json(blog);
+  } else {
+    // 404 means not found
+    response.status(404).end();
+  }
 });
 
 blogsRouter.post("/", async (request, response) => {
   let blog = null;
 
-  // if likes is not specified, set it to 0
-  if (request.body.likes) {
-    blog = new Blog(request.body);
+  // if no title or url, respond with 400 status code; bad request
+  if (request.body.title && request.body.url) {
+    // if likes is not specified, set it to 0
+    if (request.body.likes) {
+      blog = new Blog(request.body);
+    } else {
+      const rawBlog = request.body;
+      rawBlog.likes = 0;
+      blog = new Blog(rawBlog);
+    }
   } else {
-    const rawBlog = request.body;
-    rawBlog.likes = 0;
-    blog = new Blog(rawBlog);
+    // 400 means invalid input
+    response.status(400).end();
   }
 
   const result = await blog.save();
