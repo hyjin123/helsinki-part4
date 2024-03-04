@@ -17,21 +17,21 @@ beforeEach(async () => {
   }
 });
 
-describe.only("when there is initially some blogs saved", () => {
-  test.only("blogs are returned as json", async () => {
+describe("when there is initially some blogs saved", () => {
+  test("blogs are returned as json", async () => {
     await api
       .get("/api/blogs")
       .expect(200)
       .expect("Content-Type", /application\/json/);
   });
 
-  test.only("there are two blogs in the database", async () => {
+  test("there are two blogs in the database", async () => {
     const response = await helper.blogsInDb();
 
     assert.strictEqual(response.length, helper.initialBlogs.length);
   });
 
-  test.only("unique identifier is named id", async () => {
+  test("unique identifier is named id", async () => {
     const response = await helper.blogsInDb();
 
     // filter out all blogs with id property and it should match the number of initialBlog length
@@ -41,8 +41,8 @@ describe.only("when there is initially some blogs saved", () => {
   });
 });
 
-describe.only("addition of a new blog", () => {
-  test.only("valid blog can be added", async () => {
+describe("addition of a new blog", () => {
+  test("valid blog can be added", async () => {
     const newBlog = {
       title: "I love to go on walks",
       author: "Munjee Jin",
@@ -65,7 +65,7 @@ describe.only("addition of a new blog", () => {
     assert(contents.includes("I love to go on walks"));
   });
 
-  test.only("like will default to 0 if not specified", async () => {
+  test("like will default to 0 if not specified", async () => {
     const newBlog = {
       title: "I love to go on walks",
       author: "Munjee Jin",
@@ -93,7 +93,7 @@ describe.only("addition of a new blog", () => {
     assert.strictEqual(likes, 0);
   });
 
-  test.only("if title or url is missing, it doesn't save and responds with 400 status code", async () => {
+  test("if title or url is missing, it doesn't save and responds with 400 status code", async () => {
     const blogWithoutTitle = {
       author: "Munjee Jin",
       url: "www.walks.com",
@@ -117,8 +117,8 @@ describe.only("addition of a new blog", () => {
   });
 });
 
-describe.only("deletion of a blog", () => {
-  test.only("succeeds with status code 204 if id is valid for deletion", async () => {
+describe("deletion of a blog", () => {
+  test("succeeds with status code 204 if id is valid for deletion", async () => {
     const blogs = await helper.blogsInDb();
     const blogToDelete = blogs[0];
 
@@ -134,8 +134,8 @@ describe.only("deletion of a blog", () => {
   });
 });
 
-describe.only("updating a blog", () => {
-  test.only("succeeds with status code 204 if id is valid for updating", async () => {
+describe("updating a blog", () => {
+  test("succeeds with status code 204 if id is valid for updating", async () => {
     const blogs = await helper.blogsInDb();
     const blogToUpdate = blogs[0];
 

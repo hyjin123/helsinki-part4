@@ -14,7 +14,7 @@ blogsRouter.get("/:id", async (request, response) => {
   const blog = await Blog.findById(request.params.id);
 
   if (blog) {
-    response.status(201).json(blog);
+    response.status(200).json(blog);
   } else {
     // 404 means not found
     response.status(404).end();
