@@ -3,7 +3,12 @@ const usersRouter = require("express").Router();
 const User = require("../models/user");
 
 usersRouter.get("/", async (request, response) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate("blogs", {
+    title: 1,
+    author: 1,
+    url: 1,
+    likes: 1,
+  });
 
   const formattedUsers = users.map((user) => user.toJSON());
 
@@ -13,7 +18,7 @@ usersRouter.get("/", async (request, response) => {
 usersRouter.post("/", async (request, response) => {
   const { username, name, password } = request.body;
 
-  // username requirements are handled by mongoose
+  // username requirements are handled by built-in mongoose validation
 
   // password is required and must be at least 3 lengths long
   if (!password || password.length < 3) {

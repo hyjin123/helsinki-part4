@@ -2,8 +2,22 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Life",
-  "author": "Sean",
+  "title": "Life is good",
+  "author": "Nancy Tran",
   "url": "www.google.ca",
-  "likes": 2
+  "likes": 2,
+  "user": "65e75e960057a6f4966a1355"
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "I am okay",
+  "author": "Nancy Tran",
+  "url": "www.facebook.ca",
+  "likes": 2,
+  "user": "65e75e960057a6f4966a1355"
 }
