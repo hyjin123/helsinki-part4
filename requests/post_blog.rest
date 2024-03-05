@@ -1,23 +1,36 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh5amluMTIzIiwiaWQiOiI2NWU3ODg5Nzk4ZmMxNTZmZGY3YzNlZjciLCJpYXQiOjE3MDk2NzI2NjB9.6la8ex1YmMpcCBRZ0abAN4meNldjpx9nh94pmTE5Te4
 
 {
   "title": "Life is good",
-  "author": "Nancy Tran",
+  "author": "Sean Jin",
   "url": "www.google.ca",
-  "likes": 2,
-  "user": "65e75e960057a6f4966a1355"
+  "likes": 2
 }
 
 ###
 
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh5amluMTIzIiwiaWQiOiI2NWU3ODg5Nzk4ZmMxNTZmZGY3YzNlZjciLCJpYXQiOjE3MDk2NzI2NjB9.6la8ex1YmMpcCBRZ0abAN4meNldjpx9nh94pmTE5Te4
 
 {
   "title": "I am okay",
+  "author": "Sean Jin",
+  "url": "www.facebook.ca",
+  "likes": 2
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJlc3QiLCJpZCI6IjY1ZTc4ODk1OThmYzE1NmZkZjdjM2VmNSIsImlhdCI6MTcwOTY3Mjc5OH0.SspW9N9RTRdY4Y6G1VpQml0f5aVB4en3M-7-eqsy2-I
+
+{
+  "title": "I am sleepy",
   "author": "Nancy Tran",
   "url": "www.facebook.ca",
-  "likes": 2,
-  "user": "65e75e960057a6f4966a1355"
+  "likes": 2
 }
