@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh5amluMTIzIiwiaWQiOiI2NWU3ODg5Nzk4ZmMxNTZmZGY3YzNlZjciLCJpYXQiOjE3MDk2NzI2NjB9.6la8ex1YmMpcCBRZ0abAN4meNldjpx9nh94pmTE5Te4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh5amluMTIzIiwiaWQiOiI2NWU3ODg5Nzk4ZmMxNTZmZGY3YzNlZjciLCJpYXQiOjE3MDk2NzQ3Njh9.bsec38FK0-9DS-CK4b1IdAlTfAOZwcqSy0FwXgwdPtU
 
 {
   "title": "Life is good",
@@ -13,7 +13,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh5a
 
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh5amluMTIzIiwiaWQiOiI2NWU3ODg5Nzk4ZmMxNTZmZGY3YzNlZjciLCJpYXQiOjE3MDk2NzI2NjB9.6la8ex1YmMpcCBRZ0abAN4meNldjpx9nh94pmTE5Te4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh5amluMTIzIiwiaWQiOiI2NWU3ODg5Nzk4ZmMxNTZmZGY3YzNlZjciLCJpYXQiOjE3MDk2NzQ3Njh9.bsec38FK0-9DS-CK4b1IdAlTfAOZwcqSy0FwXgwdPtU
 
 {
   "title": "I am okay",
