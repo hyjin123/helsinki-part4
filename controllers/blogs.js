@@ -33,13 +33,11 @@ blogsRouter.post("/", async (request, response) => {
 
   const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
-  console.log("this is decoded token", decodedToken);
-
   if (!decodedToken.id) {
     return response.status(401).json({ error: "invalid token" });
   }
 
-  const user = await User.findById(decodedToken.id);
+  const user = request.user;
 
   const formattedBlog = {
     title: body.title,
@@ -83,18 +81,26 @@ blogsRouter.delete("/:id", async (request, response) => {
     return response.status(401).json({ error: "invalid token" });
   }
 
-  const user = await User.findById(decodedToken.id);
+  const user = request.user;
   const blog = await Blog.findById(blogId);
 
   // compare blog user id and user id obtained from the token (logged in user)
   if (blog.user.toString() === user.id.toString()) {
     await Blog.findByIdAndDelete(blogId);
-    response.status(204).end();
   } else {
     response
       .status(400)
       .json({ error: "you are not the creator of this blog" });
   }
+
+  // have to delete blog id in blog array in users collection
+  const updatedBlogs = user.blogs.filter(
+    (blog) => blog.toString() !== blogId.toString()
+  );
+
+  user.blogs = updatedBlogs;
+  await user.save();
+  response.status(204).end();
 });
 
 blogsRouter.put("/:id", async (request, response) => {
