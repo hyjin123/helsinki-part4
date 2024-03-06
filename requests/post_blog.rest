@@ -44,7 +44,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJlc
 
 ###
 # this is nancy's blog, so nancy can delete it
-DELETE http://localhost:3003/api/blogs/65e8b711c4639037e0aa890e/
+DELETE http://localhost:3003/api/blogs/65e8efa36c0f35bbbbaae43e/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJlc3QiLCJpZCI6IjY1ZThiNmJlYzQ2MzkwMzdlMGFhODhmZSIsImlhdCI6MTcwOTc0OTk5NX0.t5UHUE-kNJw1w4Fcvrm0PfPETNiBWdUXTYNRfObSZiA
 
