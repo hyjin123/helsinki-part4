@@ -31,6 +31,7 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
+// Middleware gets executed after the server receives the request and before the controller actions send the response
 const tokenExtractor = (request, response, next) => {
   const token = request.get("authorization");
   if (token && token.startsWith("Bearer ")) {
